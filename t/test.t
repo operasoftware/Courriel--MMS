@@ -14,6 +14,8 @@ isa_ok( $email, 'Courriel::MMS::MymtsRu', 'MMS from mms.mymts.ru' );
 my @images = $email->get_mms_images;
 is( scalar( @images ), 1, 'Logo filtered out' );
 
+ok( $email->create_random_image_name( 'image/jpeg' ) =~ /\.jpg$/, 'random image extension' );
+
 $email = build_email(
     subject('aaa'),
     from('aaa@tmomail.net'),
