@@ -37,7 +37,7 @@ __END__
 
 =head1 NAME
 
-Courriel::MMS::TmobileUK - L<Courriel> extension for dealing with MMS messages from T-mobile UK
+Courriel::MMS::TmobileUS - L<Courriel> extension for dealing with MMS messages from T-mobile US
 
 =head1 SYNOPSIS
 

@@ -14,6 +14,7 @@ my @subclasses = qw(
 Courriel::MMS::MymtsRu
 Courriel::MMS::TmobileUK
 Courriel::MMS::TmobileUS
+Courriel::MMS::SprintUS
 );
 
 # --- Attributes ---

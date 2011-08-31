@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Courriel::MMS::TmobileUK;
+package Courriel::MMS::SprintUS;
 use namespace::autoclean;
 use Moose;
 use WWW::Mechanize;
@@ -16,7 +16,7 @@ sub match {
     my $class = shift;
     my $email = shift;
 
-    return 1 if $email->from =~ /pm\.sprint\.com//;
+    return 1 if $email->from =~ /pm\.sprint\.com/;
     return;
 }
 
@@ -74,14 +74,11 @@ override 'get_mms_images' => sub {
        $mech->get( $image_url ); # get the actual picture (can't use mechanize's follow_link stuff since the image is in a popup)
  
        if( $mech->success && $mech->ct =~ m#^image/jpe?g# ) {
-          push @images [ 'image.jpg' => $mech->content ];
+          push @images, [ 'image.jpg' => $mech->content ];
        }
     }
  
     return @images;
-}
-
-
 };
 
 __PACKAGE__->meta()->make_immutable();
@@ -94,7 +91,7 @@ __END__
 
 =head1 NAME
 
-Courriel::MMS::TmobileUK - L<Courriel> extension for dealing with MMS messages from T-mobile UK
+Courriel::MMS::SprintUS - L<Courriel> extension for dealing with MMS messages from Sprint US.
 
 =head1 SYNOPSIS
 
