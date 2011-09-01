@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Courriel::MMS::MymtsRu;
+package Courriel::MMS::Plugin::TmobileUK;
 use namespace::autoclean;
 use Moose;
 
@@ -10,23 +10,21 @@ extends 'Courriel::MMS';
 # --- Class methods ---
 
 sub match {
-    my( $class, $email ) = @_;
+    my $class = shift;
+    my $email = shift;
 
-    return 1 if $email->from =~ /mms\.mymts\.ru/i;
+    return 1 if $email->from =~ /mmsreply\.t-mobile\.co\.uk/;
     return;
 }
 
+
 # --- Instance methods ---
 
-around '_get_image_parts' => sub {
+around 'get_mms_images' => sub {
     my $orig = shift;
     my $self = shift;
-    my @images;
-    for my $image ( $self->$orig( @_ ) ){
-        my $content_id = $image->headers()->get( 'Content-ID' );
-        push @images, $image if !defined( $content_id ) || $content_id !~ /mts_logo/;
-    }
-    return @images;
+
+    return grep { $_->[0] !~ /^logo.gif$/ } $self->$orig( @_ );
 };
 
 __PACKAGE__->meta()->make_immutable();
@@ -35,11 +33,7 @@ __PACKAGE__->meta()->make_immutable();
 
 __END__
 
-=pod
-
-=head1 NAME
-
-Courriel::MMS::MymtsRu - L<Courriel> extension for dealing with MMS messages from mms.mymts.ru
+# ABSTRACT: L<Courriel::MMS> extension for dealing with MMS messages from T-mobile UK
 
 =head1 SYNOPSIS
 

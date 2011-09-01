@@ -9,7 +9,7 @@ use File::Slurp 'slurp';
 
 my $email = Courriel::MMS->parse( text => scalar( slurp( 't/data/MymtsRu.eml' ) ) );
 
-isa_ok( $email, 'Courriel::MMS::MymtsRu', 'MMS from mms.mymts.ru' );
+isa_ok( $email, 'Courriel::MMS::Plugin::MymtsRu', 'MMS from mms.mymts.ru' );
 
 my @images = $email->get_mms_images;
 is( scalar( @images ), 1, 'Logo filtered out' );
@@ -24,7 +24,7 @@ my $c_email = build_email(
     attach( file => 't/data/cool.gif', filename => 'masthead.gif' ),
 );
 $email = Courriel::MMS->parse( text => $c_email->as_string );
-isa_ok( $email, 'Courriel::MMS::TmobileUS', 'MMS from tmomail.net' );
+isa_ok( $email, 'Courriel::MMS::Plugin::TmobileUS', 'MMS from tmomail.net' );
 @images = $email->get_mms_images;
 is( scalar( @images ), 0, 'Logo filtered out' );
 
@@ -35,7 +35,7 @@ $c_email = build_email(
     plain_body( 'test' ),
 );
 $email = Courriel::MMS->parse( text => $c_email->as_string );
-isa_ok( $email, 'Courriel::MMS::SprintUS', 'MMS from sprint' );
+isa_ok( $email, 'Courriel::MMS::Plugin::SprintUS', 'MMS from sprint' );
 
 
 

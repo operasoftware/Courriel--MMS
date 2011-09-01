@@ -2,20 +2,14 @@ use strict;
 use warnings;
 
 package Courriel::MMS;
-use namespace::autoclean;
+# use namespace::autoclean;
+# unfortunately autoclean does not work with Module::Pluggable
 use Moose;
 
 extends 'Courriel';
 
 use MIME::Types;
-use Class::MOP;
-
-my @subclasses = qw(
-Courriel::MMS::MymtsRu
-Courriel::MMS::TmobileUK
-Courriel::MMS::TmobileUS
-Courriel::MMS::SprintUS
-);
+use Module::Pluggable require => 1;
 
 # --- Attributes ---
 
@@ -30,22 +24,11 @@ around 'parse' => sub {
     my $self = shift;
     my $email = $self->$orig( @_ );
 
-    for my $class ( @subclasses ){
-        Class::MOP::load_class( $class );
+    for my $class ( $email->plugins ){
         return bless( $email, $class ) if $class->match( $email );
     }
     return $email;
 };
-
-# sub parse {
-#     my $class = shift;
-#     my $email = $class->SUPER::parse( @_ );
-#     if ( $email->from =~ /mms\.mymts\.ru/i ){
-#         require Courriel::MMS::MymtsRu;
-#         return bless( $email, 'Courriel::MMS::MymtsRu' );
-#     }
-#     return $email;
-# }
 
 # --- Instance methods ---
 
@@ -113,11 +96,7 @@ __PACKAGE__->meta()->make_immutable();
 
 __END__
 
-=pod
-
-=head1 NAME
-
-Courriel::MMS - L<Courriel> extension for dealing with MMS messages
+# ABSTRACT: L<Courriel> extension for dealing with MMS messages
 
 =head1 SYNOPSIS
 

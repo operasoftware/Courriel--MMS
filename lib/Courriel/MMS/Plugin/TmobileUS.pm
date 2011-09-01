@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Courriel::MMS::TmobileUK;
+package Courriel::MMS::Plugin::TmobileUS;
 use namespace::autoclean;
 use Moose;
 
@@ -13,7 +13,7 @@ sub match {
     my $class = shift;
     my $email = shift;
 
-    return 1 if $email->from =~ /mmsreply\.t-mobile\.co\.uk/;
+    return 1 if $email->from =~ /tmomail.net/;
     return;
 }
 
@@ -24,7 +24,7 @@ around 'get_mms_images' => sub {
     my $orig = shift;
     my $self = shift;
 
-    return grep { $_->[0] !~ /^logo.gif$/ } $self->$orig( @_ );
+    return grep { $_->[0] ne 'masthead.gif' } $self->$orig( @_ );
 };
 
 __PACKAGE__->meta()->make_immutable();
@@ -33,11 +33,7 @@ __PACKAGE__->meta()->make_immutable();
 
 __END__
 
-=pod
-
-=head1 NAME
-
-Courriel::MMS::TmobileUK - L<Courriel> extension for dealing with MMS messages from T-mobile UK
+# ABSTRACT: L<Courriel::MMS> extension for dealing with MMS messages from T-mobile US
 
 =head1 SYNOPSIS
 

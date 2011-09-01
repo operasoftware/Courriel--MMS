@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Courriel::MMS::SprintUS;
+package Courriel::MMS::Plugin::SprintUS;
 use namespace::autoclean;
 use Moose;
 use WWW::Mechanize;
@@ -87,11 +87,7 @@ __PACKAGE__->meta()->make_immutable();
 
 __END__
 
-=pod
-
-=head1 NAME
-
-Courriel::MMS::SprintUS - L<Courriel> extension for dealing with MMS messages from Sprint US.
+# ABSTRACT: L<Courriel::MMS> extension for dealing with MMS messages from Sprint US.
 
 =head1 SYNOPSIS
 
