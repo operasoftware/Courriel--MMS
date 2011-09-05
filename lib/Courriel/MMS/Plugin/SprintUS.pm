@@ -23,15 +23,12 @@ sub match {
 
 # --- Instance methods ---
 
-# this should really override the ->content method on $self->text_body_part
-# but how to do that elegantly?
-#
-sub text_content {
+sub plain_content {
     my $self = shift;
 
     my $html = $self->html_body_part->content;
 
-    my ($body) = $html->[0] =~ m#<tr>\s+<td><pre[^>]+>(.*?)</pre></td>\s+</tr>#gs;
+    my ($body) = $html =~ m#<tr>\s+<td><pre[^>]+>(.*?)</pre></td>\s+</tr>#gs;
     return $body;
 }
 

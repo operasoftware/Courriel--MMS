@@ -25,12 +25,24 @@ around 'parse' => sub {
     my $email = $self->$orig( @_ );
 
     for my $class ( $email->plugins ){
-        return bless( $email, $class ) if $class->match( $email );
+        return $class->rebless( $email ) if $class->match( $email );
     }
     return $email;
 };
 
+sub rebless {
+    my( $class, $email ) = @_;
+    return bless $email, $class;
+}
+
 # --- Instance methods ---
+
+sub plain_content { 
+    my $self = shift;
+    my $part = $self->plain_body_part;
+    return '' if !defined $part;
+    return $part->content 
+}
 
 sub _get_image_parts {
     my $self = shift;
