@@ -48,11 +48,11 @@ use File::Slurp 'slurp';
         subject('Multimedia message'),
         from( 'aaa@mms.o2.ie' ),
         to( 'example@example.com' ),
-        plain_body( 'test' ),
+        plain_body( '' ),
     );
     my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::O2Ie', 'MMS from O2 Ireland' );
-    is( $email->subject, undef, 'subject cleared for O2Ie' );
+    is( $email->subject, '', 'subject cleared for O2Ie' );
 }
 
 {
@@ -66,7 +66,7 @@ use File::Slurp 'slurp';
     );
     my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneDE', 'MMS from Vodafone DE' );
-    is( $email->subject, undef, 'subject cleared for VodafoneDE' );
+    is( $email->subject, 'some text', 'subject cleared for VodafoneDE' );
     is( $email->plain_content, 'some text', 'plain_content ignored http://www.vodafone.de' );
 }
 
@@ -93,7 +93,7 @@ use File::Slurp 'slurp';
     );
     my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneNZ', 'MMS from Vodafone New Zealand' );
-    is( $email->subject, undef, 'subject cleared for VodafoneNZ' );
+    is( $email->subject, 'test', 'subject cleared for VodafoneNZ' );
 }
 
 {
@@ -135,7 +135,7 @@ use File::Slurp 'slurp';
     );
     my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::Tele2LT', 'MMS from Tele2 Lithuania' );
-    is( $email->subject, undef, 'subject cleared for Tele2LT' );
+    is( $email->subject, 'test', 'subject cleared for Tele2LT' );
 }
 
 {

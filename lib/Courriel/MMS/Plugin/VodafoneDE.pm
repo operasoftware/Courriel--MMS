@@ -17,16 +17,9 @@ sub match {
     return;
 }
 
+sub bad_subject { $_[1] eq 'Sie haben eine MMS erhalt' }
 
 # --- Instance methods ---
-
-around subject => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $subject = $self->$orig;
-    return undef if $subject eq 'Sie haben eine MMS erhalt';
-    return $subject;
-};
 
 override plain_content => sub {
     my $self = shift;

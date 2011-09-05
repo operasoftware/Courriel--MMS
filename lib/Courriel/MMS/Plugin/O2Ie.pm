@@ -17,16 +17,9 @@ sub match {
     return;
 }
 
+sub bad_subject { $_[1] eq 'Multimedia message' }
 
 # --- Instance methods ---
-
-around subject => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $subject = $self->$orig;
-    return undef if $subject eq 'Multimedia message';
-    return $subject;
-};
 
 __PACKAGE__->meta()->make_immutable();
 

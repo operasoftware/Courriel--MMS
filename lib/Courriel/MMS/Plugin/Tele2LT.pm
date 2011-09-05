@@ -17,16 +17,9 @@ sub match {
     return;
 }
 
+sub bad_subject { $_[1] =~ /MMS via e-mail/ }
 
 # --- Instance methods ---
-
-around subject => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $subject = $self->$orig;
-    return undef if $subject =~ /MMS via e-mail/;
-    return $subject;
-};
 
 __PACKAGE__->meta()->make_immutable();
 

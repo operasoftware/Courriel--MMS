@@ -1,0 +1,4 @@
+When we have too many subclasses - then checking each of them to mach
+each of the messages will be too slow.  Probably we'll need a hash
+translating the email origin domain to the subclass.
+

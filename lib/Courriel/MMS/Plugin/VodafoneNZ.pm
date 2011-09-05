@@ -17,16 +17,9 @@ sub match {
     return;
 }
 
+sub bad_subject { $_[1] =~ /^You have a PXT from/ }
 
 # --- Instance methods ---
-
-around subject => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $subject = $self->$orig;
-    return undef if $subject =~ /^You have a PXT from/;
-    return $subject;
-};
 
 __PACKAGE__->meta()->make_immutable();
 

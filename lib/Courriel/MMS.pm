@@ -35,7 +35,35 @@ sub rebless {
     return bless $email, $class;
 }
 
+sub bad_subject {}
+
 # --- Instance methods ---
+
+around subject => sub {
+    my $orig = shift;
+    my $self = shift;
+    my $subject = $self->$orig( @_ );
+    if( $self->bad_subject( $subject ) ){
+        $subject = '';
+    }
+    if( !length( $subject ) ) {
+        my $plain_content = $self->plain_content;
+        if( length( $plain_content ) ) { 
+            ( $subject ) = $plain_content =~ /^([^\.]+\.)/g; # use the first sentence.
+            if( !$subject ) {
+                $subject = substr( $plain_content, 0, 25 ); # if still not subject, use some of the text
+            }
+        }
+        else{
+            my @images = $self->get_mms_images;
+            if( @images ) { 
+                $subject = $images[0][0]; # set subject to image filename
+            }
+        }
+    }
+    return $subject;
+};
+
 
 sub plain_content { 
     my $self = shift;
