@@ -61,15 +61,18 @@ around subject => sub {
             }
         }
     }
+    $subject =~ s/\n+\z//gmxs; # remove one or more trailing newlines
     return $subject;
 };
 
 
 sub plain_content { 
     my $self = shift;
-    my $part = $self->plain_body_part;
-    return '' if !defined $part;
-    return $part->content 
+    my $mmsstrip = shift; 
+    my @parts = $self->all_parts_matching( sub { return 1 if shift->mime_type eq 'text/plain'; return } );
+    # operator signatures are usually the last text/plain part in the mail.
+    pop @parts if $mmsstrip && scalar @parts; 
+    return join( "\n\n", map { $_->content } @parts );
 }
 
 sub _get_image_parts {
@@ -88,9 +91,11 @@ sub get_mms_images {
     my $self = shift;
     my @result;
     for my $part ( $self->_get_image_parts ){
+        my $disp = $part->disposition ? $part->disposition->attribute_value( 'name' ) : undef;
+        my $type = $part->content_type ? $part->content_type->attribute_value( 'name' ) : undef;
         my $name = $part->filename 
-            // $part->disposition->get_attribute( 'name' ) 
-            // $part->content_type->get_attribute( 'name' )
+            // $disp
+            // $type
             // $self->create_random_image_name( $part->mime_type );
         push @result, [ $name, $part->content ];
     }

@@ -23,7 +23,7 @@ around '_get_image_parts' => sub {
     my $self = shift;
     my @images;
     for my $image ( $self->$orig( @_ ) ){
-        my $content_id = $image->headers()->get( 'Content-ID' );
+        my( $content_id ) = $image->headers()->get_values( 'Content-ID' );
         push @images, $image if !defined( $content_id ) || $content_id !~ /mts_logo/;
     }
     return @images;

@@ -8,6 +8,24 @@ use Courriel::Builder;
 use File::Slurp 'slurp';
 
 {
+    my $template_path = '/home/zby/myopera/MyOperaFunctionalTests/uploads/mms/photo-ferreiro.txt';
+    open F, '<:utf8', $template_path;
+    my $message = join("", <F>);
+    close F;
+    my $address = 'photo+qjwdepoa@my.opera.com';
+    $message =~ s/\%MMSADDRESS\%/$address/go;
+
+
+    my $email = Courriel::MMS->parse( text => $message );
+
+    isa_ok( $email, 'Courriel::MMS', 'MMS' );
+
+    my @images = $email->get_mms_images;
+    is( scalar( @images ), 1, 'There are images' );
+    is( $images[0][0], "Iv\x{00E1}n Ferreiro.jpeg");
+}
+
+{
     my $email = Courriel::MMS->parse( text => scalar( slurp( 't/data/MymtsRu.eml' ) ) );
 
     isa_ok( $email, 'Courriel::MMS::Plugin::MymtsRu', 'MMS from mms.mymts.ru' );
@@ -16,7 +34,9 @@ use File::Slurp 'slurp';
     is( scalar( @images ), 1, 'Logo filtered out' );
 
     ok( $email->create_random_image_name( 'image/jpeg' ) =~ /\.jpg$/, 'random image extension' );
+}
 
+{
     my $c_email = build_email(
         subject('aaa'),
         from('aaa@tmomail.net'),
@@ -24,11 +44,12 @@ use File::Slurp 'slurp';
         plain_body( 'test' ),
         attach( file => 't/data/cool.gif', filename => 'masthead.gif' ),
     );
-    $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::TmobileUS', 'MMS from tmomail.net' );
-    @images = $email->get_mms_images;
+    my @images = $email->get_mms_images;
     is( scalar( @images ), 0, 'Logo filtered out' );
     is( $email->plain_content, 'test', 'plain_content' );
+    is( $email->plain_content( 1 ), '', 'plain_content with mmsstrip' );
 }
 
 {
