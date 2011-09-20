@@ -8,7 +8,7 @@ use Courriel::Builder;
 use File::Slurp 'slurp';
 
 {
-    my $template_path = '/home/zby/myopera/MyOperaFunctionalTests/uploads/mms/photo-ferreiro.txt';
+    my $template_path = 't/data/photo-ferreiro.txt';
     open F, '<:utf8', $template_path;
     my $message = join("", <F>);
     close F;
