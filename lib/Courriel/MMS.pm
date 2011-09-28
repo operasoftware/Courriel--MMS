@@ -46,7 +46,7 @@ around subject => sub {
     if( $self->bad_subject( $subject ) ){
         $subject = '';
     }
-    if( !length( $subject ) ) {
+    if( !defined $subject or !length( $subject ) ) {
         my $plain_content = $self->plain_content;
         if( length( $plain_content ) ) { 
             ( $subject ) = $plain_content =~ /^([^\.]+\.)/g; # use the first sentence.
