@@ -81,7 +81,7 @@ sub _get_image_parts {
         sub {
             my $part = shift;
             my $mime = $part->mime_type();
-            return 1 if ( $mime =~ qr{image/(jpeg|gif|png)} );
+            return 1 if ( $mime =~ qr{image/(jpg|jpeg|gif|png)} );
             return;
         }
     );
