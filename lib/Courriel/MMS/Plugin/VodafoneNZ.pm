@@ -13,7 +13,7 @@ sub match {
     my $class = shift;
     my $email = shift;
 
-    return 1 if $email->from =~ /pxt.vodafone.net.nz/;
+    return 1 if $email->from =~ /pxt\.vodafone\.net\.nz$/;
     return;
 }
 

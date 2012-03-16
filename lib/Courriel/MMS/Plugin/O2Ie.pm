@@ -13,7 +13,7 @@ sub match {
     my $class = shift;
     my $email = shift;
 
-    return 1 if $email->from =~ /mms\.o2\.ie/;
+    return 1 if $email->from =~ /mms\.o2\.ie$/;
     return;
 }
 

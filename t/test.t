@@ -55,6 +55,22 @@ use File::Slurp 'slurp';
 {
     my $c_email = build_email(
         subject('aaa'),
+        from('aaa@mmsreply.t-mobile.co.uk'),
+        to( 'example@example.com' ),
+        plain_body( 'test' ),
+        attach( file => 't/data/cool.gif', filename => 'logo.gif' ),
+    );
+    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    isa_ok( $email, 'Courriel::MMS::Plugin::TmobileUK', 'MMS from T-Mobile UK' );
+    my @images = $email->get_mms_images;
+    is( scalar( @images ), 0, 'Logo filtered out' );
+    is( $email->plain_content, 'test', 'plain_content' );
+    is( $email->plain_content( 1 ), '', 'plain_content with mmsstrip' );
+}
+
+{
+    my $c_email = build_email(
+        subject('aaa'),
         from( 'aaa@pm.sprint.com' ),
         to( 'example@example.com' ),
         html_body( '<html><body><table><tr> <td><pre >some text</pre></td> </tr></table></body></html>' ),
@@ -169,6 +185,18 @@ use File::Slurp 'slurp';
     my $email = Courriel::MMS->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::RadiolinjaFI', 'MMS from Radiolinja Finland' );
     is( $email->plain_content, '', 'content cleared for Radiolinja' );
+}
+
+# check if username will not confuse the domain detection
+{
+    my $c_email = build_email(
+        subject('MMS via e-mail'),
+        from( 'mms.tele2.lt@doesnotexi.st' ),
+        to( 'example@example.com' ),
+        plain_body( 'test' ),
+    );
+    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    ok( !$email->isa('Courriel::MMS::Plugin::Tele2LT'), 'MMS not from Tele2 Lithuania' );
 }
 
 done_testing();

@@ -12,7 +12,7 @@ extends 'Courriel::MMS';
 sub match {
     my( $class, $email ) = @_;
 
-    return 1 if $email->from =~ /mms\.mymts\.ru/i;
+    return 1 if $email->from =~ /mms\.mymts\.ru$/i;
     return;
 }
 
