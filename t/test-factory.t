@@ -3,9 +3,11 @@ use warnings;
 
 use Test::More;
 
-use Courriel::MMS;
+use Courriel::MMS::Factory;
 use Courriel::Builder;
 use File::Slurp 'slurp';
+
+my $fact = Courriel::MMS::Factory->new(source_file => 'domains.json');
 
 {
     my $template_path = 't/data/photo-ferreiro.txt';
@@ -16,7 +18,7 @@ use File::Slurp 'slurp';
     $message =~ s/\%MMSADDRESS\%/$address/go;
 
 
-    my $email = Courriel::MMS->parse( text => $message );
+    my $email = $fact->parse( text => $message );
 
     isa_ok( $email, 'Courriel::MMS', 'MMS' );
 
@@ -26,9 +28,10 @@ use File::Slurp 'slurp';
 }
 
 {
-    my $email = Courriel::MMS->parse( text => scalar( slurp( 't/data/MymtsRu.eml' ) ) );
+    my $email = $fact->parse( text => scalar( slurp( 't/data/MymtsRu.eml' ) ) );
 
     isa_ok( $email, 'Courriel::MMS::Plugin::MymtsRu', 'MMS from mms.mymts.ru' );
+    isa_ok( $email, 'Courriel::MMS' );
 
     my @images = $email->get_mms_images;
     is( scalar( @images ), 1, 'Logo filtered out' );
@@ -44,7 +47,7 @@ use File::Slurp 'slurp';
         plain_body( 'test' ),
         attach( file => 't/data/cool.gif', filename => 'masthead.gif' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::TmobileUS', 'MMS from tmomail.net' );
     my @images = $email->get_mms_images;
     is( scalar( @images ), 0, 'Logo filtered out' );
@@ -60,7 +63,7 @@ use File::Slurp 'slurp';
         plain_body( 'test' ),
         attach( file => 't/data/cool.gif', filename => 'logo.gif' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::TmobileUK', 'MMS from T-Mobile UK' );
     my @images = $email->get_mms_images;
     is( scalar( @images ), 0, 'Logo filtered out' );
@@ -75,7 +78,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         html_body( '<html><body><table><tr> <td><pre >some text</pre></td> </tr></table></body></html>' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::SprintUS', 'MMS from sprint' );
     is( $email->plain_content, 'some text', 'plain_content extracted from html' );
 }
@@ -87,7 +90,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         plain_body( '' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::O2Ie', 'MMS from O2 Ireland' );
     is( $email->subject, '', 'subject cleared for O2Ie' );
 }
@@ -101,7 +104,7 @@ use File::Slurp 'slurp';
         attach( mime_type => 'text/plain', content => 'some text' ),
         html_body( '<html><body><table><tr> <td><pre >some text</pre></td> </tr></table></body></html>' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneDE', 'MMS from Vodafone DE' );
     is( $email->subject, 'some text', 'subject cleared for VodafoneDE' );
     is( $email->plain_content, 'some text', 'plain_content ignored http://www.vodafone.de' );
@@ -115,7 +118,7 @@ use File::Slurp 'slurp';
         plain_body( 'test' ),
         attach( file => 't/data/cool.gif', filename => 'met:h_left.jpg' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneNL', 'MMS from vodafone.nl' );
     my @images = $email->get_mms_images;
     is( scalar( @images ), 0, 'Logo filtered out' );
@@ -128,7 +131,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         plain_body( 'test' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneNZ', 'MMS from Vodafone New Zealand' );
     is( $email->subject, 'test', 'subject cleared for VodafoneNZ' );
 }
@@ -144,7 +147,7 @@ use File::Slurp 'slurp';
     );
     my $mtext = $c_email->as_string;
     $mtext =~ s/vf00.jpg/images\/vf00.jpg/;
-    my $email = Courriel::MMS->parse( text => $mtext );
+    my $email = $fact->parse( text => $mtext );
     isa_ok( $email, 'Courriel::MMS::Plugin::VodafoneUK', 'MMS from Vodafone UK' );
     is( $email->plain_content, 'some text', 'plain_content from html' );
     my @images = $email->get_mms_images;
@@ -158,7 +161,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         html_body( "<h1>aaa</h1></div>\n<div class=\"text-400\">\nsome text\n</div>" ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::TelenorSE', 'MMS from Telenor SE' );
     is( $email->plain_content, 'some text', 'plain_content from html' );
 }
@@ -170,7 +173,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         plain_body( 'test' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::Tele2LT', 'MMS from Tele2 Lithuania' );
     is( $email->subject, 'test', 'subject cleared for Tele2LT' );
 }
@@ -182,7 +185,7 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         plain_body( 'This is a HTML message, sorry' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     isa_ok( $email, 'Courriel::MMS::Plugin::RadiolinjaFI', 'MMS from Radiolinja Finland' );
     is( $email->plain_content, '', 'content cleared for Radiolinja' );
 }
@@ -195,8 +198,9 @@ use File::Slurp 'slurp';
         to( 'example@example.com' ),
         plain_body( 'test' ),
     );
-    my $email = Courriel::MMS->parse( text => $c_email->as_string );
+    my $email = $fact->parse( text => $c_email->as_string );
     ok( !$email->isa('Courriel::MMS::Plugin::Tele2LT'), 'MMS not from Tele2 Lithuania' );
 }
 
 done_testing();
+
