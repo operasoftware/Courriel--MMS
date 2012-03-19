@@ -9,14 +9,6 @@ extends 'Courriel::MMS';
 
 # --- Class methods ---
 
-sub match {
-    my $class = shift;
-    my $email = shift;
-
-    return 1 if $email->from =~ /mms\.tele2\.\w+$/;
-    return;
-}
-
 sub bad_subject { $_[1] =~ /MMS via e-mail/ }
 
 # --- Instance methods ---

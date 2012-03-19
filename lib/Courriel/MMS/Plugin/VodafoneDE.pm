@@ -9,14 +9,6 @@ extends 'Courriel::MMS';
 
 # --- Class methods ---
 
-sub match {
-    my $class = shift;
-    my $email = shift;
-
-    return 1 if $email->from =~ /mmsmail\.vodafone\.de$/;
-    return;
-}
-
 sub bad_subject { $_[1] eq 'Sie haben eine MMS erhalt' }
 
 # --- Instance methods ---

@@ -9,14 +9,6 @@ extends 'Courriel::MMS';
 
 # --- Class methods ---
 
-sub match {
-    my $class = shift;
-    my $email = shift;
-
-    return 1 if $email->from =~ /pxt\.vodafone\.net\.nz$/;
-    return;
-}
-
 sub bad_subject { $_[1] =~ /^You have a PXT from/ }
 
 # --- Instance methods ---

@@ -7,15 +7,6 @@ use Moose;
 
 extends 'Courriel::MMS';
 
-# --- Class methods ---
-
-sub match {
-    my( $class, $email ) = @_;
-
-    return 1 if $email->from =~ /mms\.mymts\.ru$/i;
-    return;
-}
-
 # --- Instance methods ---
 
 around '_get_image_parts' => sub {

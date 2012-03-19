@@ -7,17 +7,6 @@ use Moose;
 
 extends 'Courriel::MMS';
 
-# --- Class methods ---
-
-sub match {
-    my $class = shift;
-    my $email = shift;
-
-    return 1 if $email->from =~ /mmsc\.radiolinja\.fi$/;
-    return;
-}
-
-
 # --- Instance methods ---
 
 around plain_content => sub {
