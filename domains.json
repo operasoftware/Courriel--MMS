@@ -1,0 +1,14 @@
+{
+    "mms.mymts.ru":"Courriel::MMS::Plugin::MymtsRu",
+    "mms.o2.ie":"Courriel::MMS::Plugin::O2Ie",
+    "mmsc.radiolinja.fi":"Courriel::MMS::Plugin::RadiolinjaFI",
+    "pm.sprint.com":"Courriel::MMS::Plugin::SprintUS",
+    "mms.tele2.lt":"Courriel::MMS::Plugin::Tele2LT",
+    "mms-email.telenor.se":"Courriel::MMS::Plugin::TelenorSE",
+    "mmsreply.t-mobile.co.uk":"Courriel::MMS::Plugin::TmobileUK",
+    "tmomail.net":"Courriel::MMS::Plugin::TmobileUS",
+    "mmsmail.vodafone.de":"Courriel::MMS::Plugin::VodafoneDE",
+    "mms2mail.vodafone.nl":"Courriel::MMS::Plugin::VodafoneNL",
+    "pxt.vodafone.net.nz":"Courriel::MMS::Plugin::VodafoneNZ",
+    "mms.vodafone.co.uk":"Courriel::MMS::Plugin::VodafoneUK"
+}

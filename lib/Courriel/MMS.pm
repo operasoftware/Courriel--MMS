@@ -9,7 +9,6 @@ use Moose;
 extends 'Courriel';
 
 use MIME::Types;
-use Module::Pluggable require => 1;
 
 # --- Attributes ---
 
@@ -17,18 +16,7 @@ has mime_types => ( is => 'ro', lazy_build => 1 );
 
 sub _build_mime_types { MIME::Types->new() }
 
-
 # --- Class methods ---
-around 'parse' => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $email = $self->$orig( @_ );
-
-    for my $class ( $email->plugins ){
-        return $class->rebless( $email ) if $class->match( $email );
-    }
-    return $email;
-};
 
 sub rebless {
     my( $class, $email ) = @_;
