@@ -7,6 +7,17 @@ use Moose;
 
 extends 'Courriel::MMS';
 
+# --- Class methods ---
+
+sub match {
+    my $class = shift;
+    my $email = shift;
+
+    return 1 if $email->from =~ /mmsreply\.t-mobile\.co\.uk$/;
+    return;
+}
+
+
 # --- Instance methods ---
 
 around 'get_mms_images' => sub {

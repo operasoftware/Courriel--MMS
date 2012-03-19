@@ -10,6 +10,17 @@ extends 'Courriel::MMS';
 
 use constant DEBUG => 0;
 
+# --- Class methods ---
+
+sub match {
+    my $class = shift;
+    my $email = shift;
+
+    return 1 if $email->from =~ /pm\.sprint\.com$/;
+    return;
+}
+
+
 # --- Instance methods ---
 
 sub plain_content {
